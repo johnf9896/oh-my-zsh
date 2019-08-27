@@ -22,6 +22,8 @@ alias tkss='tmux kill-session -t'
 : ${ZSH_TMUX_AUTOCONNECT:=true}
 # Automatically close the terminal when tmux exits
 : ${ZSH_TMUX_AUTOQUIT:=$ZSH_TMUX_AUTOSTART}
+# Automatically name the new session based on the basename of PWD
+: ${ZSH_TMUX_AUTONAME_SESSION:=false}
 # Set term to screen or screen-256color based on current terminal support
 : ${ZSH_TMUX_FIXTERM:=true}
 # Set '-CC' option for iTerm2 tmux integration
@@ -66,7 +68,21 @@ function _zsh_tmux_plugin_run() {
   # If failed, just run tmux, fixing the TERM variable if requested.
   if [[ $? -ne 0 ]]; then
     [[ "$ZSH_TMUX_FIXTERM" == "true" ]] && tmux_cmd+=(-f "$_ZSH_TMUX_FIXED_CONFIG")
-    $tmux_cmd new-session -s ${PWD##*/}
+
+    # Name the session after the basename of the current directory
+    local session_name=${PWD##*/}
+    # If the current directory is the home directory, name it 'home'
+    [[ "$PWD" == "$HOME" ]] && session_name="home"
+
+    # Test if the session already exists
+    $tmux_cmd ls -F "#{session_name}" | grep "^$session_name$"
+
+    # If autoname is enabled and the name is not taken, start a named session
+    if [[ "$ZSH_TMUX_AUTONAME_SESSION" == "true" && $? -ne 0 ]]; then
+        $tmux_cmd new-session -s $session_name
+    else # Otherwise, let tmux name the session
+        $tmux_cmd new-session
+    fi
   fi
 
   if [[ "$ZSH_TMUX_AUTOQUIT" == "true" ]]; then
