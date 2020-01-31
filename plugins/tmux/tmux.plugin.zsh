@@ -24,18 +24,18 @@ alias tkss='tmux kill-session -t'
 : ${ZSH_TMUX_AUTOQUIT:=$ZSH_TMUX_AUTOSTART}
 # Automatically name the new session based on the basename of PWD
 : ${ZSH_TMUX_AUTONAME_SESSION:=false}
-# Set term to screen or screen-256color based on current terminal support
+# Set term to tmux or tmux-256color based on current terminal support
 : ${ZSH_TMUX_FIXTERM:=true}
 # Set '-CC' option for iTerm2 tmux integration
 : ${ZSH_TMUX_ITERM2:=false}
 # The TERM to use for non-256 color terminals.
-# Tmux states this should be screen, but you may need to change it on
+# Tmux states this should be tmux, but you may need to change it on
 # systems without the proper terminfo
-: ${ZSH_TMUX_FIXTERM_WITHOUT_256COLOR:=screen}
+: ${ZSH_TMUX_FIXTERM_WITHOUT_256COLOR:=tmux}
 # The TERM to use for 256 color terminals.
-# Tmux states this should be screen-256color, but you may need to change it on
+# Tmux states this should be tmux-256color, but you may need to change it on
 # systems without the proper terminfo
-: ${ZSH_TMUX_FIXTERM_WITH_256COLOR:=screen-256color}
+: ${ZSH_TMUX_FIXTERM_WITH_256COLOR:=tmux-256color}
 # Set the configuration path
 : ${ZSH_TMUX_CONFIG:=$HOME/.tmux.conf}
 # Set -u option to support unicode
