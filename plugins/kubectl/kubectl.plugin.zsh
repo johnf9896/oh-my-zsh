@@ -150,3 +150,13 @@ alias kepvc='kubectl edit pvc'
 alias kdpvc='kubectl describe pvc'
 alias kdelpvc='kubectl delete pvc'
 
+# Only run if the user actually has kubectl installed
+if (( $+commands[kubectl] )); then
+  kj() { kubectl "$@" -o json | jq; }
+  kjx() { kubectl "$@" -o json | fx; }
+  ky() { kubectl "$@" -o yaml | yh; }
+
+  compdef kj=kubectl
+  compdef kjx=kubectl
+  compdef ky=kubectl
+fi
